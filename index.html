@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>try API</title>
+</head>
+<body>
+    <input type="text" id="user-count"><button id="load-user">load-user</button>
+    <h2>User Data</h2>
+    <div id="user-div">
+
+    </div>
+    <div id="user-dataisl">
+
+    </div>
+
+
+    <script>
+
+        document.getElementById("load-user").addEventListener("click", function(){
+            const userCount = document.getElementById("user-count").value
+            const count = parseInt(userCount);
+            fetch('https://jsonplaceholder.typicode.com/users')
+            .then(res => res.json())
+            .then(data => {
+                data = data.slice(0, count)
+                const parentDiv = document.getElementById("user-div")
+                parentDiv.innerHTML = "";
+                for (let i = 0; i < data.length; i++) {
+                    const user = data[i];
+                    const p = document.createElement("p");
+                    p.innerHTML = `Name: <strong>${user.name}</strong> <button onClick='getUserDatails(${user.id})'>Datails -${user.id}</button>`
+                    parentDiv.appendChild(p)
+                }
+            })
+        })
+
+        function getUserDatails(userId) {
+            fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                const userDataisl = document.getElementById("user-dataisl");
+                userDataisl.innerHTML = `
+                    <h1>User Datails</h1>
+                    <h3>Name: ${data.name}</h3>
+                    <h3> Phone: ${data.phone}</h3>
+                    <h3> Email: ${data.email}</h3>
+                    <h3> User Name: ${data.username}</h3>
+                    <h3>Websitw: ${data.website}</h3>
+                    <h3>Company: ${data.company.name}</h3>
+                `
+            })
+        }
+
+    </script>
+</body>
+</html>
